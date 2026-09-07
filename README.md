@@ -10,6 +10,8 @@ Only the `NCNotificationListView` layout direction getter and setter are hooked.
 
 The native notification area below the clock/widgets is retained. This does not move notifications above the clock. No Settings panel or dependencies on preference libraries.
 
+The direction override applies to every instance of the native notification list, including nested group lists. The intended result is downward growth for both the outer list and expanded groups. Collapsed groups retain their native overlapping-card appearance. Group layout still needs confirmation on the device.
+
 ## Validation status
 
 First device-test build. Compilation and package validation do not establish runtime compatibility. The layout and interactions must be checked on a jailbroken iOS 16 device; no physical-device test has been performed by the build environment.

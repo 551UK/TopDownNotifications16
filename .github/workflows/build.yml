@@ -29,6 +29,7 @@ jobs:
       - name: Validate package and architectures
         run: |
           set -euo pipefail
+          brew install dpkg
           debs=(packages/*.deb)
           test "${#debs[@]}" -eq 1
           test "$(dpkg-deb -f "${debs[0]}" Architecture)" = iphoneos-arm64

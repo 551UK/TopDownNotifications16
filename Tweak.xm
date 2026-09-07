@@ -10,6 +10,7 @@
 %hook NCNotificationListView
 
 // Let Apple's list engine compute positions from its native top origin.
+// This class is shared by the outer list and nested notification group lists.
 // Do not replace layoutSubviews, card frames, transforms or animation code.
 - (BOOL)layoutFromBottom {
     return NO;

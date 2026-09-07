@@ -1,6 +1,6 @@
 Package: com.551.topdownnotifications16
 Name: TopDownNotifications16
-Version: 1.1.3
+Version: 1.1.4
 Architecture: iphoneos-arm64
 Description: iOS 14-style notifications on iOS 16. Notifications start at the top and stack downward, including grouped notifications, while keeping the native iOS 16 look.
 Maintainer: 551

@@ -1,6 +1,6 @@
 Package: com.551.topdownnotifications16
 Name: TopDownNotifications16
-Version: 1.1.1
+Version: 1.1.2
 Architecture: iphoneos-arm64
 Description: Positions native iOS 16 notifications at the top of the notification area so the list grows downward. Keeps the native notification cards and grouping.
 Maintainer: 551

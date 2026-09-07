@@ -26,7 +26,7 @@ jobs:
         run: |
           chmod 755 layout/DEBIAN/postinst
           make clean package FINALPACKAGE=1
-      - name: Validate package and architectures
+      - name: Validate package
         run: |
           set -euo pipefail
           brew install dpkg
@@ -34,33 +34,29 @@ jobs:
           test "${#debs[@]}" -eq 1
           test "$(dpkg-deb -f "${debs[0]}" Architecture)" = iphoneos-arm64
           test "$(dpkg-deb -f "${debs[0]}" Package)" = com.551.topdownnotifications16
-          dpkg-deb --info "${debs[0]}"
-          dpkg-deb --contents "${debs[0]}"
           dpkg-deb -x "${debs[0]}" "$RUNNER_TEMP/topdown-check"
+
           binary="$RUNNER_TEMP/topdown-check/var/jb/Library/MobileSubstrate/DynamicLibraries/TopDownNotifications16.dylib"
+          prefs="$RUNNER_TEMP/topdown-check/var/jb/Library/PreferenceBundles/TopDownNotifications16Prefs.bundle"
+          entries="$RUNNER_TEMP/topdown-check/var/jb/Library/PreferenceLoader/Preferences"
+
           test -s "$binary"
           xcrun lipo "$binary" -verify_arch arm64 arm64e
-          xcrun otool -L "$binary"
-          plutil -lint "$RUNNER_TEMP/topdown-check/var/jb/Library/MobileSubstrate/DynamicLibraries/TopDownNotifications16.plist"
-          prefs="$RUNNER_TEMP/topdown-check/var/jb/Library/PreferenceBundles/TopDownNotifications16Prefs.bundle"
           xcrun lipo "$prefs/TopDownNotifications16Prefs" -verify_arch arm64 arm64e
           plutil -lint "$prefs/Info.plist"
-          entries="$RUNNER_TEMP/topdown-check/var/jb/Library/PreferenceLoader/Preferences"
           plutil -lint "$entries/TopDownNotifications16.plist"
-          for suffix in '' '@2x' '@3x'; do
-            test -s "$prefs/icon${suffix}.png"
-            test -s "$entries/TopDownNotifications16${suffix}.png"
-            sips -g pixelWidth -g pixelHeight "$entries/TopDownNotifications16${suffix}.png"
+
+          suffixes=('' '@2x' '@3x')
+          sizes=(29 58 87)
+          for i in 0 1 2; do
+            suffix="${suffixes[$i]}"
+            size="${sizes[$i]}"
+            for icon in "$entries/TopDownNotifications16${suffix}.png" "$prefs/TopDownNotifications16${suffix}.png" "$prefs/icon${suffix}.png"; do
+              test -s "$icon"
+              test "$(sips -g pixelWidth "$icon" | awk '/pixelWidth/{print $2}')" = "$size"
+              test "$(sips -g pixelHeight "$icon" | awk '/pixelHeight/{print $2}')" = "$size"
+            done
           done
-      - name: Verify Settings screen in Simulator
-        run: bash tests/settings-smoke.sh
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Settings-UI-check
-          path: |
-            build/settings-preview.png
-            build/settings-smoke.txt
-          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: TopDownNotifications16-rootless

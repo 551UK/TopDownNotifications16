@@ -1,6 +1,24 @@
 #import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 #include <string.h>
+#import "PositionPreferences.h"
+
+static CGFloat TDOffset = 0;
+
+@interface CSCoverSheetViewController : UIViewController
+- (CGFloat)listMinY;
+@end
+
+%group FirstNotificationPosition
+%hook CSCoverSheetViewController
+- (CGFloat)listMinY {
+    CGFloat nativeY = %orig;
+    if (TDOffset == 0 || !isfinite(nativeY)) return nativeY;
+    // Shift the outer area's top once; nested groups retain native spacing.
+    return MAX(0, nativeY + TDOffset);
+}
+%end
+%end
 
 @interface NCNotificationListView : UIScrollView
 @property (nonatomic) BOOL layoutFromBottom;
@@ -48,6 +66,13 @@ static BOOL TDIsBooleanMethod(Method method, unsigned int arguments) {
             return;
         }
         %init(TopDownLayout);
+        TDOffset = TDReadOffset();
+        Method minimumY = class_getInstanceMethod(objc_getClass("CSCoverSheetViewController"), @selector(listMinY));
+        char resultType[32] = {0};
+        if (minimumY) method_getReturnType(minimumY, resultType, sizeof(resultType));
+        if (minimumY && method_getNumberOfArguments(minimumY) == 2 && strcmp(resultType, @encode(CGFloat)) == 0) {
+            %init(FirstNotificationPosition);
+        }
         NSLog(@"[TopDownNotifications16] Native top-down layout enabled.");
     }
 }

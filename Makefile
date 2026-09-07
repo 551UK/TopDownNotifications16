@@ -7,7 +7,9 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = TopDownNotifications16
 TopDownNotifications16_FILES = Tweak.xm
-TopDownNotifications16_FRAMEWORKS = UIKit Foundation
+TopDownNotifications16_FRAMEWORKS = UIKit Foundation CoreFoundation
 TopDownNotifications16_CFLAGS = -fobjc-arc -Wall -Wextra -Wno-unused-parameter
 
 include $(THEOS_MAKE_PATH)/tweak.mk
+SUBPROJECTS += prefs
+include $(THEOS_MAKE_PATH)/aggregate.mk

@@ -42,6 +42,25 @@ jobs:
           xcrun lipo "$binary" -verify_arch arm64 arm64e
           xcrun otool -L "$binary"
           plutil -lint "$RUNNER_TEMP/topdown-check/var/jb/Library/MobileSubstrate/DynamicLibraries/TopDownNotifications16.plist"
+          prefs="$RUNNER_TEMP/topdown-check/var/jb/Library/PreferenceBundles/TopDownNotifications16Prefs.bundle"
+          xcrun lipo "$prefs/TopDownNotifications16Prefs" -verify_arch arm64 arm64e
+          plutil -lint "$prefs/Info.plist"
+          entries="$RUNNER_TEMP/topdown-check/var/jb/Library/PreferenceLoader/Preferences"
+          plutil -lint "$entries/TopDownNotifications16.plist"
+          for suffix in '' '@2x' '@3x'; do
+            test -s "$prefs/icon${suffix}.png"
+            test -s "$entries/TopDownNotifications16${suffix}.png"
+            sips -g pixelWidth -g pixelHeight "$entries/TopDownNotifications16${suffix}.png"
+          done
+      - name: Verify Settings screen in Simulator
+        run: bash tests/settings-smoke.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Settings-UI-check
+          path: |
+            build/settings-preview.png
+            build/settings-smoke.txt
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: TopDownNotifications16-rootless

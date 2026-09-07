@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>entry</key>
+	<dict>
+		<key>bundle</key>
+		<string>TopDownNotifications16Prefs</string>
+		<key>bundlePath</key>
+		<string>/var/jb/Library/PreferenceBundles/TopDownNotifications16Prefs.bundle</string>
+		<key>cell</key>
+		<string>PSLinkCell</string>
+		<key>detail</key>
+		<string>TDRootListController</string>
+		<key>icon</key>
+		<string>TopDownNotifications16.png</string>
+		<key>isController</key>
+		<true/>
+		<key>label</key>
+		<string>TopDownNotifications16</string>
+	</dict>
+</dict>
+</plist>

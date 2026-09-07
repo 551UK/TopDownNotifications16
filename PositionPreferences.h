@@ -3,6 +3,19 @@
 #include <math.h>
 
 static NSString *const TDPreferenceDomain = @"com.551.topdownnotifications16";
+
+static inline BOOL TDReadEnabled(void) {
+    CFPreferencesAppSynchronize((__bridge CFStringRef)TDPreferenceDomain);
+    id value = CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("Enabled"), (__bridge CFStringRef)TDPreferenceDomain));
+    return [value isKindOfClass:NSNumber.class] ? [value boolValue] : YES;
+}
+
+static inline void TDWriteEnabled(BOOL enabled) {
+    NSNumber *value = @(enabled);
+    CFPreferencesSetAppValue(CFSTR("Enabled"), (__bridge CFPropertyListRef)value, (__bridge CFStringRef)TDPreferenceDomain);
+    CFPreferencesAppSynchronize((__bridge CFStringRef)TDPreferenceDomain);
+}
+
 static inline double TDReadOffset(void) {
     CFPreferencesAppSynchronize((__bridge CFStringRef)TDPreferenceDomain);
     id value = CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("FirstNotificationOffset"), (__bridge CFStringRef)TDPreferenceDomain));

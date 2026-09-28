@@ -84,6 +84,25 @@ static const CGFloat kIOS16ListInset = 10.0;
 - (BOOL)isRevealed;
 @end
 
+/*
+ * iOS 16 exposes three global lock-screen notification display styles:
+ * 0 = Standard/List, 1 = Stack, 2 = Hidden/Count.
+ *
+ * TopDownNotifications16 is a list-style tweak, so SpringBoard must stay in
+ * Standard/List mode while the tweak is enabled. The user's saved preference
+ * is not rewritten; only SpringBoard's effective/runtime value is overridden.
+ */
+static const long long kTDListDisplayStyle = 0;
+
+@interface NCNotificationSystemSettings : NSObject
+- (unsigned long long)listDisplayStyleSetting;
+@end
+
+@interface NCNotificationRootList : NSObject
+- (long long)currentListDisplayStyleSetting;
+- (void)setCurrentListDisplayStyleSetting:(long long)setting;
+@end
+
 static BOOL TDIsHistoryHeader(UIView *header) {
     if (![header isKindOfClass:NSClassFromString(@"NCNotificationListSectionHeaderView")]) return NO;
     id section = ((NCNotificationListSectionHeaderView *)header).delegate;
@@ -113,6 +132,22 @@ static void TDApplyHistoryHeaderReveal(NCNotificationListView *list) {
 }
 
 %group TopDownLayout
+
+%hook NCNotificationSystemSettings
+- (unsigned long long)listDisplayStyleSetting {
+    return (unsigned long long)kTDListDisplayStyle;
+}
+%end
+
+%hook NCNotificationRootList
+- (long long)currentListDisplayStyleSetting {
+    return kTDListDisplayStyle;
+}
+
+- (void)setCurrentListDisplayStyleSetting:(long long)setting {
+    %orig(kTDListDisplayStyle);
+}
+%end
 
 %hook NCNotificationListView
 - (BOOL)layoutFromBottom {

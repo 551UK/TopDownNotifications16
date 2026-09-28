@@ -26,7 +26,7 @@ iOS 14-15 style notifications for iOS 16. Notifications start at the top and sta
 | **Vertically centred app icon** | Centres the notification app icon vertically on taller or multiline notifications. |
 | **13 pt card corners** | Uses the tighter iOS 15-style 13 pt notification-card corner radius. |
 | **Stack overlay corners** | Applies the same 13 pt radius to the dimming layer used by stacked notifications. |
-| **Native List / Stack / Count choice retained** | Does not override Settings → Notifications → Display As; Apple's selected notification display mode is still used. |
+| **Always-expanded List display** | Forces SpringBoard's effective iOS 16 notification display style to **List** while the tweak is enabled, preventing the global Stack/Count state from collapsing notifications into an `N+ Notifications` pile. The user's saved Display As preference is left unchanged. |
 | **Respring button** | Uses rootless `sbreload`, with a SpringBoard restart fallback. |
 | **Preference values clamped** | Rejects invalid/non-finite position values and keeps the offset within -100 to +250 pt. |
 | **Runtime safety check** | Verifies the `layoutFromBottom` getter and setter exist with the expected BOOL signatures before activating the layout hooks. |

@@ -26,7 +26,7 @@ iOS 14-15 style notifications for iOS 16. Notifications start at the top and sta
 | **Vertically centred app icon** | Centres the notification app icon vertically on taller or multiline notifications. |
 | **13 pt card corners** | Uses the tighter iOS 15-style 13 pt notification-card corner radius. |
 | **Stack overlay corners** | Applies the same 13 pt radius to the dimming layer used by stacked notifications. |
-| **Always-expanded List display** | Pins iOS 16 SpringBoard's active `NCNotificationMasterList` display style to **List** while the tweak is enabled, preventing temporary Stack/Count transitions from collapsing the whole notification list. The user's saved Display As preference is left unchanged. |
+| **Always-expanded List display** | **List** in Settings is only the saved/default display style; iOS 16 can temporarily change the active Lock Screen presentation through its runtime notification transitions. The tweak pins SpringBoard's active `NCNotificationMasterList` style to **List**, preventing those temporary Stack/Count states from collapsing notifications into a `+N from…` row. Normal same-app notification grouping is still kept, and the user's saved Display As preference is left unchanged. |
 | **Respring button** | Uses rootless `sbreload`, with a SpringBoard restart fallback. |
 | **Preference values clamped** | Rejects invalid/non-finite position values and keeps the offset within -100 to +250 pt. |
 | **Runtime safety check** | Verifies the `layoutFromBottom` getter and setter exist with the expected BOOL signatures before activating the layout hooks. |

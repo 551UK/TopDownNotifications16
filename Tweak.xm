@@ -98,9 +98,9 @@ static const long long kTDListDisplayStyle = 0;
 - (unsigned long long)listDisplayStyleSetting;
 @end
 
-@interface NCNotificationRootList : NSObject
-- (long long)currentListDisplayStyleSetting;
-- (void)setCurrentListDisplayStyleSetting:(long long)setting;
+@interface NCNotificationMasterList : NSObject
+- (unsigned long long)currentListDisplayStyleSetting;
+- (void)setCurrentListDisplayStyleSetting:(unsigned long long)setting;
 @end
 
 static BOOL TDIsHistoryHeader(UIView *header) {
@@ -139,13 +139,13 @@ static void TDApplyHistoryHeaderReveal(NCNotificationListView *list) {
 }
 %end
 
-%hook NCNotificationRootList
-- (long long)currentListDisplayStyleSetting {
-    return kTDListDisplayStyle;
+%hook NCNotificationMasterList
+- (unsigned long long)currentListDisplayStyleSetting {
+    return (unsigned long long)kTDListDisplayStyle;
 }
 
-- (void)setCurrentListDisplayStyleSetting:(long long)setting {
-    %orig(kTDListDisplayStyle);
+- (void)setCurrentListDisplayStyleSetting:(unsigned long long)setting {
+    %orig((unsigned long long)kTDListDisplayStyle);
 }
 %end
 
